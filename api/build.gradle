@@ -30,6 +30,7 @@ dependencies {
 
     compile("org.springframework.boot:spring-boot-starter-jetty")
     compile("org.springframework.boot:spring-boot-starter-actuator")
+    compile("org.springframework.boot:spring-boot-starter-thymeleaf")
 
     compile("org.slf4j:slf4j-api:$slf4jVersion")
     compile("ch.qos.logback:logback-classic:$logbackVersion")

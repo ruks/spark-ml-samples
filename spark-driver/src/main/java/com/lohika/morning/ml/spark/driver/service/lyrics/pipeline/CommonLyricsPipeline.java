@@ -56,7 +56,16 @@ public abstract class CommonLyricsPipeline implements LyricsPipeline {
             System.out.println("Probability: " + probability);
             System.out.println("------------------------------------------------\n");
 
-            return new GenrePrediction(getGenre(prediction).getName(), probability.apply(0), probability.apply(1));
+            return new GenrePrediction(getGenre(prediction).getName(),
+                    probability.apply(0),
+                    probability.apply(1),
+                    probability.apply(2),
+                    probability.apply(3),
+                    probability.apply(4),
+                    probability.apply(5),
+                    probability.apply(6),
+                    probability.apply(7)
+            );
         }
 
         System.out.println("------------------------------------------------\n");
@@ -64,8 +73,16 @@ public abstract class CommonLyricsPipeline implements LyricsPipeline {
     }
 
     Dataset<Row> readLyrics() {
-        Dataset input = readLyricsForGenre(lyricsTrainingSetDirectoryPath, Genre.METAL)
-                                                .union(readLyricsForGenre(lyricsTrainingSetDirectoryPath, Genre.POP));
+//        ['pop', 'country', 'blues', 'jazz', 'reggae', 'rock', 'hip hop']
+        Dataset input = readLyricsForGenre(lyricsTrainingSetDirectoryPath, Genre.POP)
+                                                .union(readLyricsForGenre(lyricsTrainingSetDirectoryPath, Genre.COUNTRY))
+                                                .union(readLyricsForGenre(lyricsTrainingSetDirectoryPath, Genre.BLUES))
+                                                .union(readLyricsForGenre(lyricsTrainingSetDirectoryPath, Genre.JAZZ))
+                                                .union(readLyricsForGenre(lyricsTrainingSetDirectoryPath, Genre.REGGAE))
+                                                .union(readLyricsForGenre(lyricsTrainingSetDirectoryPath, Genre.ROCK))
+                                                .union(readLyricsForGenre(lyricsTrainingSetDirectoryPath, Genre.HIP_HOP))
+                                                .union(readLyricsForGenre(lyricsTrainingSetDirectoryPath, Genre.RAP))
+                ;
         // Reduce the input amount of partition minimal amount (spark.default.parallelism OR 2, whatever is less)
         input = input.coalesce(sparkSession.sparkContext().defaultMinPartitions()).cache();
         // Force caching.
